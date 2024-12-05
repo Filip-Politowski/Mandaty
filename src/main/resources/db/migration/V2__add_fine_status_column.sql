@@ -1,0 +1,2 @@
+ALTER TABLE fine
+ADD fine_status VARCHAR(255) DEFAULT 'UNPAID';
