@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+<div class="container">
+    <form th:action="@{/add_fine}" method="post" enctype="multipart/form-data">
+        <label for="employeeType">Employee Type</label>
+        <select id="employeeType" name="employeeType" onchange="toggleEmployeeFields()">
+            <option value="PHYSICAL" selected>Physical Employee</option>
+            <option value="OFFICE">Office Employee</option>
+        </select>
+
+
+        <div id="physicalEmployeeFields">
+            <label for="employee">Select Employee from list</label>
+            <select id="employee" name="employeeId">
+                <option value="" selected disabled>-- Select Employee --</option>
+                <th:block th:each="employee : ${session.employees}">
+                    <option th:value="${employee.id}"
+                            th:text="${employee.firstName + ' ' + employee.lastName}"></option>
+                </th:block>
+            </select>
+        </div>
+
+
+        <div id="officeEmployeeFields" style="display: none;">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName"/>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName"/>
+        </div>
+
+        <label for="violationDate">Violation Date</label>
+        <input type="date" id="violationDate" name="violationDate" required/>
+
+        <label for="violationReason">Violation Reason</label>
+        <select id="violationReason" name="violationReason" onchange="toggleOtherField()">
+            <option value="SPEEDING">Speeding</option>
+            <option value="INCORRECT_PARKING">Incorrect Parking</option>
+            <option value="VANDALISM">Vandalism</option>
+            <option value="DRINKING_ALCOHOL">Drinking Alcohol</option>
+            <option value="OTHER">Other...</option>
+        </select>
+
+        <div id="customViolationReasonDiv" style="display: none;">
+            <label for="customViolationReason">Please specify:</label>
+            <input type="text" id="customViolationReason" name="customViolationReason"/>
+        </div>
+
+        <label for="amount">Fine Amount</label>
+        <input type="number" id="amount" name="amount" required/>
+        <p>Plus administrative fee equals = 100zł</p>
+
+        <label for="currency">Currency</label>
+        <select name="currency" id="currency">
+            <option value="PLN">PLN</option>
+            <option value="EUR">EUR</option>
+        </select>
+
+        <label for="paymentDeadline">Payment Deadline</label>
+        <input type="date" id="paymentDeadline" name="paymentDeadline" required/>
+
+        <label for="file">Upload PDF</label>
+        <input type="file" id="file" name="file" accept=".pdf" />
+
+        <button type="submit">Submit</button>
+    </form>
+    <div th:if="${session.positiveMessage}" class="positive-message">
+        <p th:text="${session.positiveMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+</div>
+
+<script th:src="@{/js/form-scripts.js}"></script>
+
+</body>
+</html>

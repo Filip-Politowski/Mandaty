@@ -3,6 +3,8 @@ package pl.filip_politowski.mandaty.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -18,6 +20,8 @@ public class Employee {
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
+    @Column(name = "phone_number")
+    private String phoneNumber;
     @Enumerated(EnumType.STRING)
     @Column(name = "employee_type")
     private EmployeeType employeeType;
@@ -26,4 +30,6 @@ public class Employee {
     private JobStatus jobStatus;
     @Column(name="company_name")
     private String companyName;
+    @OneToMany(mappedBy = "employee")
+    private List<Fine> fines;
 }

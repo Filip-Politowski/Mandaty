@@ -4,5 +4,6 @@ public enum ViolationReason {
     SPEEDING,
     INCORRECT_PARKING,
     VANDALISM,
-    DRINKING_ALCOHOL
+    DRINKING_ALCOHOL,
+    OTHER
 }

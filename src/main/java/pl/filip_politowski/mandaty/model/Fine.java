@@ -4,12 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-
+import java.util.List;
 
 
 @Entity
 @Getter
 @Setter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "fine")
@@ -21,6 +22,9 @@ public class Fine {
     @Enumerated(EnumType.STRING)
     @Column(name = "employee_type")
     private EmployeeType employeeType;
+    @ManyToOne
+    @JoinColumn(name = "employee_id")
+    private Employee employee;
     @Column(name ="signature")
     private String signature;
     @Column(name = "violation_date")
@@ -28,13 +32,15 @@ public class Fine {
     @Enumerated(EnumType.STRING)
     @Column(name = "violation_reason")
     private ViolationReason violationReason;
+    @Column(name = "custom_violation_reason")
+    private String customViolationReason;
     @Column(name = "amount")
     private Double amount;
     @Enumerated(EnumType.STRING)
     @Column(name = "currency")
     private Currency currency;
     @Column(name = "administrative_fee")
-    private Double administrativeFee = 100.00;
+    private Double administrativeFee;
     @Column(name = "pdf")
     private String pdf;
     @Column(name = "payment_deadline")
