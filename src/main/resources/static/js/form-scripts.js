@@ -1,8 +1,39 @@
-function toggleEmployeeFields() {
-    var employeeType = document.getElementById("employeeType").value;
-    var physicalEmployeeFields = document.getElementById("physicalEmployeeFields");
-    var officeEmployeeFields = document.getElementById("officeEmployeeFields");
+function handleFileChange() {
+    const fileInput = document.getElementById('file');
+    const label = document.querySelector('.file-upload-label');
+    const fileNameParagraph = document.getElementById('file-name');
 
+
+    fileNameParagraph.style.display = 'block';
+    fileNameParagraph.textContent = fileInput.files[0].name;
+    label.textContent = 'Select other file';
+
+}
+
+const cancelForm = () => {
+    let form = document.getElementById("myForm");
+    const physicalEmployeeFields = document.getElementById("physicalEmployeeFields");
+    const officeEmployeeFields = document.getElementById("officeEmployeeFields");
+    const otherField = document.getElementById("customViolationReasonDiv");
+    const fileInput = document.getElementById('file');
+    const label = document.querySelector('.file-upload-label');
+    const fileNameParagraph = document.getElementById('file-name');
+
+    fileNameParagraph.style.display = "none";
+    fileNameParagraph.textContent = "";
+    label.textContent = "Add PDF file";
+    otherField.style.display = "none";
+    physicalEmployeeFields.style.display = "block";
+    officeEmployeeFields.style.display = "none";
+    form.reset();
+}
+
+
+
+const toggleEmployeeFields = () => {
+    let employeeType = document.getElementById("employeeType").value;
+    const physicalEmployeeFields = document.getElementById("physicalEmployeeFields");
+    const officeEmployeeFields = document.getElementById("officeEmployeeFields");
     if (employeeType === "PHYSICAL") {
         physicalEmployeeFields.style.display = "block";
         officeEmployeeFields.style.display = "none";
@@ -12,12 +43,12 @@ function toggleEmployeeFields() {
     }
 }
 
-
-function toggleOtherField() {
-    var select = document.getElementById("violationReason");
-    var otherOption = select.value === "OTHER";
-    var otherField = document.getElementById("customViolationReasonDiv");
+const toggleOtherField = () => {
+    const select = document.getElementById("violationReason");
+    let otherOption = select.value === "OTHER";
+    const otherField = document.getElementById("customViolationReasonDiv");
     otherField.style.display = otherOption ? "block" : "none";
 }
-window.onload = toggleEmployeeFields;
 
+
+window.onload = toggleEmployeeFields;

@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="../static/style.css">
+    <link  th:href="@{/css/style.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/form-scripts.js}"></script>
 </head>
 <body>
 <div class="container">
-    <form th:action="@{/add_fine}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/add_fine}" method="post" enctype="multipart/form-data" id="myForm">
         <label for="employeeType">Employee Type</label>
         <select id="employeeType" name="employeeType" onchange="toggleEmployeeFields()">
             <option value="PHYSICAL" selected>Physical Employee</option>
@@ -65,10 +66,12 @@
         <label for="paymentDeadline">Payment Deadline</label>
         <input type="date" id="paymentDeadline" name="paymentDeadline" required/>
 
-        <label for="file">Upload PDF</label>
-        <input type="file" id="file" name="file" accept=".pdf" />
+        <label for="file" class="file-upload-label">Add PDF File</label>
+        <input type="file" id="file" name="file" accept=".pdf" style="display: none;" onchange="handleFileChange()" />
+        <p id="file-name" style="display: none;">No file selected</p>
 
-        <button type="submit">Submit</button>
+        <button type="button" onclick="cancelForm()">Cancel</button>
+        <button type="submit" id="submitButton" >Save</button>
     </form>
     <div th:if="${session.positiveMessage}" class="positive-message">
         <p th:text="${session.positiveMessage}"></p>
@@ -79,7 +82,7 @@
     </div>
 </div>
 
-<script th:src="@{/js/form-scripts.js}"></script>
+
 
 </body>
 </html>

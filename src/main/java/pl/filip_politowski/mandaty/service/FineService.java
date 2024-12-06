@@ -29,13 +29,22 @@ public class FineService {
         return "SIGN-" + employee.getId() + "-" + fineRequest.getViolationDate().toString();
     }
 
+    public Double calculateFinalAmountOfFine(FineRequest fineRequest) {
+        double administrativeFee = 100.00;
+        if (fineRequest.getCurrency().equals(Currency.EUR)) {
+            return Math.round((fineRequest.getAmount() + administrativeFee / 4.2) * 100.0) / 100.0;
+        } else {
+            return fineRequest.getAmount() + administrativeFee;
+        }
+    }
+
     public void saveFineInRepository(FineRequest fineRequest) {
 
         String generatedSignature = generateSignature(fineRequest);
         Fine fine = fineMapper.toFine(fineRequest);
         fine.setFineStatus(FineStatus.UNPAID);
         fine.setAdministrativeFee(100.00);
-        fine.setAmount(fine.getAmount() + fine.getAdministrativeFee());
+        fine.setAmount(calculateFinalAmountOfFine(fineRequest));
         Employee employee = createEmployeeFromRequest(fineRequest);
         fine.setEmployee(employee);
         fine.setSignature(generatedSignature);

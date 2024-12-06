@@ -2,23 +2,22 @@ package pl.filip_politowski.mandaty.controller;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import pl.filip_politowski.mandaty.dto.request.FineRequest;
 import pl.filip_politowski.mandaty.model.Employee;
+import pl.filip_politowski.mandaty.service.EmailService;
 import pl.filip_politowski.mandaty.service.EmployeeService;
 import pl.filip_politowski.mandaty.service.FileUploadService;
 import pl.filip_politowski.mandaty.service.FineService;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -27,6 +26,7 @@ public class AddFineController {
     private final FineService fineService;
     private final EmployeeService employeeService;
     private final FileUploadService fileUploadService;
+    private final EmailService emailService;
 
 
     @GetMapping
@@ -47,6 +47,7 @@ public class AddFineController {
             String signature = fineService.generateSignature(fineRequest);
             if (fineService.isFineExist(signature)) {
                 model.addAttribute("errorMessage", "Fine with this signature already exists in the system.");
+                session.removeAttribute("positiveMessage");
                 return "form_add_fine";
             }
 
@@ -54,6 +55,7 @@ public class AddFineController {
             fineRequest.setPdf(filePath);
 
             fineService.saveFineInRepository(fineRequest);
+            emailService.sendEmail("j.kowalski@test.pl", "Fine nr. " + signature + " request to pay", fineRequest, signature);
 
             session.setAttribute("positiveMessage", "Fine added successfully.");
             return "redirect:/add_fine";

@@ -2,7 +2,6 @@ package pl.filip_politowski.mandaty.mapper;
 
 import org.springframework.stereotype.Component;
 import pl.filip_politowski.mandaty.dto.request.FineRequest;
-import pl.filip_politowski.mandaty.model.Employee;
 import pl.filip_politowski.mandaty.model.Fine;
 
 @Component

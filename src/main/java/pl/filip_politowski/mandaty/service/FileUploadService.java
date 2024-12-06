@@ -15,10 +15,13 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class FileUploadService {
 
-   @Value("${upload.directory}")
+    @Value("${upload.directory}")
     private String uploadDir;
 
     public String uploadFile(MultipartFile file) throws IOException {
+        if (file.isEmpty()) {
+            return "";
+        }
         String originalFileName = file.getOriginalFilename();
         String extension = originalFileName != null ? originalFileName.substring(originalFileName.lastIndexOf(".")) : "";
         String uniqueFileName = UUID.randomUUID() + extension;
