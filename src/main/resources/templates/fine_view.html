@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<link th:href="@{/css/fineView.css}" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <title>Fine view</title>
+</head>
+<body>
+<div class="container">
+    <h1>Fine Details</h1>
+    <div class="detail-container">
+        <p>Name: <span th:text="${fine.firstName} + ' ' + ${fine.lastName}"></span></p>
+        <p>Company: <span th:text="${fine.companyName}"></span></p>
+        <p>Phone Number: <span th:text="${fine.phoneNumber}"></span></p>
+        <p>Fine Signature: <span th:text="${fine.fineSignature}"></span></p>
+        <p>Violation Date: <span th:text="${fine.violationDate}"></span></p>
+        <p>Violation Reason: <span th:text="${fine.violationReason}"></span></p>
+        <p>Amount: <span th:text="${fine.amount} + ' ' + ${fine.currency}"></span></p>
+        <p>Administrative Fee: <span th:text="${fine.administrationFee}"></span></p>
+        <p>Payment Deadline: <span th:text="${fine.paymentDeadline}"></span></p>
+        <p>Status: <span th:text="${fine.fineStatus}"></span></p>
+    </div>
+
+
+    <div class="button-container">
+        <form th:action="@{/fine-view/delete-fine/{id}(id=${fine.id})}" method="post">
+            <button type="submit" class="delete-fine-btn" th:disabled="${fine.fineStatus.toString() == 'PAID'}"
+                    th:style="${fine.fineStatus.toString() == 'PAID' ? 'background-color: grey;' : ''}">Delete
+                Fine
+            </button>
+        </form>
+
+        <form th:action="@{/fine-view/pay-fine/{id}(id=${fine.id})}" method="post">
+            <button type="submit" class="pay-fine-btn" th:disabled="${fine.fineStatus.toString() == 'PAID'}"
+                    th:style="${fine.fineStatus.toString() == 'PAID' ? 'background-color: grey;' : ''}">Pay
+            </button>
+        </form>
+
+        <form th:action="@{/edit-fine/{id}(id=${fine.id})}" method="get">
+            <button class="edit-fine-btn" th:disabled="${fine.fineStatus.toString() == 'PAID'}"
+                    th:style="${fine.fineStatus.toString() == 'PAID' ? 'background-color: grey;' : ''}">Edit
+            </button>
+        </form>
+
+    </div>
+    <a href="/fines">Back to Fines Table</a>
+</div>
+</body>
+</html>

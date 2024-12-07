@@ -13,7 +13,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class FileUploadService {
+public class PdfService {
 
     @Value("${upload.directory}")
     private String uploadDir;
@@ -31,5 +31,14 @@ public class FileUploadService {
         Files.copy(file.getInputStream(), path);
 
         return path.toString();
+    }
+
+    public void deleteFile(String pdfPath) {
+        Path path = Paths.get(pdfPath);
+        try {
+            Files.delete(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

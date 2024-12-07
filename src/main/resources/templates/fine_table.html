@@ -2,9 +2,117 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Fine Table</title>
+    <link th:href="@{/css/fineTable.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/fine-table.js}"></script>
 </head>
 <body>
+<header th:replace="~{fragments/header}"></header>
+<div class="container">
+    <div th:if="${successMessage}" class="alert alert-success">
+        <p th:text="${successMessage}"></p>
+    </div>
+    <div class="select-search-container">
+        <label for="search-type">Search by:</label>
+        <select id="search-type" onchange="toggleFormChange()">
+            <option value="name" th:selected="${nameForm == 'name'}">First and Last Name</option>
+            <option value="signature" th:selected="${signatureForm == 'signature'}">Signature</option>
+            <option value="phone" th:selected="${phoneForm == 'phone'}">Phone Number</option>
+        </select>
+    </div>
+    <div id="form-name" class="form-container">
+        <form th:action="@{/fines/search/first-name/last-name}" method="get">
+            <div class="inputs-search">
+                <label for="firstName">First Name:</label>
+                <input type="text" id="firstName" name="firstName" placeholder="Enter First Name"
+                       th:value="${firstName}">
 
+                <label for="lastName">Last Name:</label>
+                <input type="text" id="lastName" name="lastName" placeholder="Enter Last Name" th:value="${lastName}">
+            </div>
+            <div th:insert="~{fragments/filter_form :: filter_form}" class="filter-container"></div>
+        </form>
+    </div>
+    <div id="form-signature" class="form-container">
+        <form th:action="@{/fines/search/signature}" method="get">
+            <div class="inputs-search">
+                <label for="signature-search">Signature:</label>
+                <input type="text" id="signature-search" name="signature" placeholder="Enter signature"
+                       th:value="${signature}">
+            </div>
+
+            <div th:insert="~{fragments/filter_form :: filter_form}"></div>
+        </form>
+    </div>
+    <div id="phone-form" class="form-container">
+        <form th:action="@{/fines/search}" method="get">
+            <div class="inputs-search">
+                <label for="phone-number-search">Phone Number:</label>
+                <input type="text" id="phone-number-search" name="phoneNumber" placeholder="Enter phone number"
+                       th:value="${phoneNumber}">
+            </div>
+            <div th:insert="~{fragments/filter_form :: filter_form}"></div>
+        </form>
+    </div>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th>Imię i Nazwisko</th>
+                <th>Spółka</th>
+                <th>Nr telefonu</th>
+                <th>Sygnatura Mandatu</th>
+                <th>Data Wykroczenia</th>
+                <th>Powód Wykroczenia</th>
+                <th>Kwota Mandatu</th>
+                <th>Opłata Administracyjna</th>
+                <th>Termin Płatności</th>
+                <th>Status</th>
+                <th>Akcje</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="fine : ${fines}">
+                <td th:text="${fine.firstName} + ' ' + ${fine.lastName}"></td>
+                <td th:text="${fine.companyName}"></td>
+                <td th:text="${fine.phoneNumber}"></td>
+                <td th:text="${fine.fineSignature}"></td>
+                <td th:text="${fine.violationDate}"></td>
+                <td th:text="${fine.violationReason != 'OTHER' ? fine.violationReason : fine.customViolationReason}"></td>
+                <td th:text="${fine.amount} + ', ' + ${fine.currency} "></td>
+                <td th:text="${fine.administrationFee} + ', PLN' "></td>
+                <td th:text="${fine.paymentDeadline}"></td>
+                <td  th:style="${fine.fineStatus.toString() == 'PAID' ? 'color: Green' : 'color: Red'}">
+                    <span th:class="${fine.fineStatus == 'PAID' ? 'PAID' : 'UNPAID'}"
+                          th:text="${fine.fineStatus}"></span>
+                </td>
+                <td>
+                    <div class="table-buttons-container">
+                        <form th:action="@{/fines/view-pdf}" method="post" target="_blank">
+                            <input type="hidden" name="pdfPath" th:value="${fine.pdf}"/>
+                            <button type="submit" class="view-pdf-btn" th:disabled="${fine.pdf == ''}"
+                                    th:style="${fine.pdf == '' ? 'background-color: grey;' : ''}">View Attachment
+                            </button>
+                        </form>
+                        <form th:action="@{/fines/delete-pdf}" method="post">
+                            <input type="hidden" name="pdfPath" th:value="${fine.pdf}"/>
+                            <button type="submit" class="delete-pdf-btn"
+                                    th:disabled="${fine.pdf == '' or fine.fineStatus.toString() == 'PAID'}"
+                                    th:style="${fine.fineStatus.toString() == 'PAID' or fine.pdf == '' ? 'background-color: grey;' : ''}">
+                                Delete
+                                Attachment
+                            </button>
+                        </form>
+                        <a th:href="@{/fine-view/{id}(id=${fine.id})}">
+                            <button class="fine-view">Fine View</button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
 </body>
 </html>

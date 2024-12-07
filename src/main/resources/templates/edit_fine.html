@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Fine</title>
+    <link th:href="@{/css/addAndEditFine.css}" rel="stylesheet">
+    <script type="text/javascript" th:src="@{/js/form-scripts.js}"></script>
+</head>
+<body>
+
+<div class="container">
+    <h1>Edit Fine</h1>
+    <form th:action="@{/edit-fine/{id}(id=${fine.id})}" method="post" enctype="multipart/form-data" id="myForm">
+        <div class="select-container">
+            <label for="employeeType">Employee Type</label>
+            <select id="employeeType" name="employeeType" onchange="toggleEmployeeFields()">
+                <option value="PHYSICAL" th:selected="${fine.employeeType.toString() == 'PHYSICAL'}">Physical Employee
+                </option>
+                <option value="OFFICE" th:selected="${fine.employeeType.toString() == 'OFFICE'}">Office Employee
+                </option>
+            </select>
+        </div>
+
+        <div id="physicalEmployeeFields" class="select-container">
+            <label for="employee">Select Employee from list</label>
+            <select id="employee" name="employeeId">
+                <th:block th:each="employee : ${employees}">
+                    <option th:value="${employee.id}"
+                            th:text="${employee.firstName + ' ' + employee.lastName}"
+                            th:selected="${fine.firstName == employee.firstName}"></option>
+                </th:block>
+            </select>
+        </div>
+
+
+        <div id="officeEmployeeFields" style="display: none;" class="input-container">
+            <label for="firstName">First Name</label>
+            <input type="text" id="firstName" name="firstName" th:value="${fine.firstName}"/>
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="lastName" name="lastName" th:value="${fine.lastName}"/>
+        </div>
+        <div class="input-container">
+            <label for="violationDate">Violation Date</label>
+            <input type="date" id="violationDate" name="violationDate" required th:value="${fine.violationDate}"/>
+        </div>
+        <div class="select-container">
+            <label for="violationReason">Violation Reason</label>
+            <select id="violationReason" name="violationReason" onchange="toggleOtherField()">
+                <option value="SPEEDING" th:selected="${fine.violationReason.toString() == 'SPEEDING'} ">Speeding
+                </option>
+                <option value="INCORRECT_PARKING"
+                        th:selected="${fine.violationReason.toString() == 'INCORRECT_PARKING'}">
+                    Incorrect Parking
+                </option>
+                <option value="VANDALISM" th:selected="${fine.violationReason.toString() == 'VANDALISM'}">Vandalism
+                </option>
+                <option value="DRINKING_ALCOHOL" th:selected="${fine.violationReason.toString() == 'DRINKING_ALCOHOL'}">
+                    Drinking Alcohol
+                </option>
+                <option value="OTHER" th:selected="${fine.violationReason.toString() == 'OTHER' }">Other...</option>
+            </select>
+        </div>
+
+        <div id="customViolationReasonDiv" style="display: none;" class="input-container">
+            <label for="customViolationReason">Please specify:</label>
+            <input type="text" id="customViolationReason" name="customViolationReason"
+                   th:value="${fine.customViolationReason}"/>
+        </div>
+        <div class="input-container">
+            <label for="amount">Fine Amount</label>
+            <input type="number" id="amount" name="amount" th:value="${fine.amount}" required/>
+            <p>Plus administrative fee equals = 100zł</p>
+        </div>
+        <div class="select-container">
+            <label for="currency">Currency</label>
+            <select name="currency" id="currency">
+                <option value="PLN" th:selected="${fine.currency.toString() == 'PLN'}">PLN</option>
+                <option value="EUR" th:selected="${fine.currency.toString() == 'EUR'}">EUR</option>
+            </select>
+        </div>
+        <div class="input-container">
+            <label for="paymentDeadline">Payment Deadline</label>
+            <input type="date" id="paymentDeadline" name="paymentDeadline" th:value="${fine.paymentDeadline}" required/>
+        </div>
+        <div class="input-container">
+            <label for="file" class="file-upload-label">Add PDF File</label>
+            <input type="file" id="file" name="file" accept=".pdf" style="display: none;"
+                   onchange="handleFileChange()"/>
+            <p id="file-name" th:style="${fine.pdf != null ? '' : 'display: none;'}"
+               th:text="${fine.pdf != null ? fine.pdf : 'No file selected'}"></p>
+        </div>
+        <div class="button-container">
+            <a th:href="@{/fine-view/{id}(id=${fine.id})}">
+                <button type="button">Back</button>
+            </a>
+
+
+            <button type="submit" id="submitButton">Save</button>
+        </div>
+    </form>
+
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+</div>
+
+
+</body>
+</html>

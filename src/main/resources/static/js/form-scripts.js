@@ -29,7 +29,6 @@ const cancelForm = () => {
 }
 
 
-
 const toggleEmployeeFields = () => {
     let employeeType = document.getElementById("employeeType").value;
     const physicalEmployeeFields = document.getElementById("physicalEmployeeFields");
@@ -43,6 +42,7 @@ const toggleEmployeeFields = () => {
     }
 }
 
+
 const toggleOtherField = () => {
     const select = document.getElementById("violationReason");
     let otherOption = select.value === "OTHER";
@@ -50,5 +50,7 @@ const toggleOtherField = () => {
     otherField.style.display = otherOption ? "block" : "none";
 }
 
-
-window.onload = toggleEmployeeFields;
+window.onload = function () {
+    toggleEmployeeFields();
+    toggleOtherField();
+};

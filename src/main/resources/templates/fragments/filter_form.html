@@ -1,0 +1,54 @@
+<div th:fragment="filter_form" class="filter-selectors">
+    <div class="select-container">
+        <label for="fine-status-filter">Fine Status:</label>
+        <select id="fine-status-filter" name="fineStatus">
+            <option value="">-- All --</option>
+            <option value="PAID" th:selected="${fineStatus == 'PAID'}">Paid</option>
+            <option value="UNPAID" th:selected="${fineStatus == 'UNPAID'}">Unpaid</option>
+        </select>
+    </div>
+    <div class="select-container">
+        <label for="currency-filter">Currency:</label>
+        <select id="currency-filter" name="currency">
+            <option value="">-- All --</option>
+            <option value="EUR" th:selected="${currency == 'EUR'}">EUR</option>
+            <option value="PLN" th:selected="${currency == 'PLN'}">PLN</option>
+        </select>
+    </div>
+    <div class="select-container">
+        <label for="violation-reason-filter">Violation Reason:</label>
+        <select id="violation-reason-filter" name="violationReason">
+            <option value="">-- All --</option>
+            <option value="SPEEDING" th:selected="${violationReason == 'SPEEDING'}">Speeding</option>
+            <option value="INCORRECT_PARKING" th:selected="${violationReason == 'INCORRECT_PARKING'}">Incorrect Parking
+            </option>
+            <option value="VANDALISM" th:selected="${violationReason == 'VANDALISM'}">Vandalism</option>
+            <option value="DRINKING_ALCOHOL" th:selected="${violationReason == 'DRINKING_ALCOHOL'}">Drinking alcohol
+            </option>
+            <option value="OTHER" th:selected="${violationReason == 'OTHER'}">Other</option>
+        </select>
+    </div>
+    <div class="input-container">
+        <label for="violation-date-filter">Violation Date:</label>
+        <input type="date" id="violation-date-filter" name="violationDate" th:value="${violationDate}">
+    </div>
+    <div class="input-container">
+        <label for="payment-deadline-filter">Payment Deadline:</label>
+        <input type="date" id="payment-deadline-filter" name="paymentDeadline" th:value="${paymentDeadline}">
+    </div>
+    <div class="select-container">
+        <label for="company-name-filter">Company Name:</label>
+        <select id="company-name-filter" name="companyName">
+            <option value="">-- All --</option>
+            <th:block th:each="company : ${companies}">
+                <option th:value="${company}"
+                        th:text="${company}"
+                        th:selected="${company == companyName}"></option>
+            </th:block>
+        </select>
+    </div>
+    <div class="button-container">
+        <button onclick="clearFilters()">Clear filters</button>
+        <button type="submit">Search</button>
+    </div>
+</div>

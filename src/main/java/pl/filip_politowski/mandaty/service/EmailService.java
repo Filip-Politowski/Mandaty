@@ -1,7 +1,5 @@
 package pl.filip_politowski.mandaty.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -22,9 +20,10 @@ public class EmailService {
     public void sendEmail(String to, String subject, FineRequest fineRequest, String signature) {
 
         String fineAmount = fineService.calculateFinalAmountOfFine(fineRequest).toString();
-        String currency = fineRequest.getCurrency().toString(); // Przykładowa waluta
-        String paymentDeadline = fineRequest.getPaymentDeadline().toString(); // Przykładowy termin płatności
-        String mandateLink = "https://example.com/mandate/12345";
+        String currency = fineRequest.getCurrency().toString();
+        String paymentDeadline = fineRequest.getPaymentDeadline().toString();
+        Long id = fineService.findFineIdByEmployeeId(fineRequest.getEmployeeId());
+        String mandateLink = "http://localhost:8080/fine-view/" + id;
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("fine-notifications@police.com");

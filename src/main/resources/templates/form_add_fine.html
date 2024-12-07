@@ -2,21 +2,30 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    <link  th:href="@{/css/style.css}" rel="stylesheet">
+    <title>Add Fine</title>
+    <link th:href="@{/css/addAndEditFine.css}" rel="stylesheet">
+    <link th:href="@{/css/header.css}" rel="stylesheet">
     <script type="text/javascript" th:src="@{/js/form-scripts.js}"></script>
 </head>
 <body>
+<header th:replace="~{fragments/header}"></header>
+
 <div class="container">
+    <h1>Add Fine</h1>
     <form th:action="@{/add_fine}" method="post" enctype="multipart/form-data" id="myForm">
-        <label for="employeeType">Employee Type</label>
-        <select id="employeeType" name="employeeType" onchange="toggleEmployeeFields()">
-            <option value="PHYSICAL" selected>Physical Employee</option>
-            <option value="OFFICE">Office Employee</option>
-        </select>
+        <a href="/fines">
+            <p class="exit-button">X</p>
+        </a>
+        <div class="select-container, employee-type-container">
+            <label for="employeeType">Employee Type</label>
+            <select id="employeeType" name="employeeType" onchange="toggleEmployeeFields()">
+                <option value="PHYSICAL">Physical Employee</option>
+                <option value="OFFICE" selected>Office Employee</option>
+            </select>
+        </div>
 
 
-        <div id="physicalEmployeeFields">
+        <div id="physicalEmployeeFields" class="select-container">
             <label for="employee">Select Employee from list</label>
             <select id="employee" name="employeeId">
                 <option value="" selected disabled>-- Select Employee --</option>
@@ -28,60 +37,65 @@
         </div>
 
 
-        <div id="officeEmployeeFields" style="display: none;">
+        <div id="officeEmployeeFields" style="display: none;" class="input-container">
             <label for="firstName">First Name</label>
             <input type="text" id="firstName" name="firstName"/>
 
             <label for="lastName">Last Name</label>
             <input type="text" id="lastName" name="lastName"/>
         </div>
+        <div class="input-container">
+            <label for="violationDate">Violation Date</label>
+            <input type="date" id="violationDate" name="violationDate" required/>
+        </div>
+        <div class="select-container">
+            <label for="violationReason">Violation Reason</label>
+            <select id="violationReason" name="violationReason" onchange="toggleOtherField()">
+                <option value="SPEEDING">Speeding</option>
+                <option value="INCORRECT_PARKING">Incorrect Parking</option>
+                <option value="VANDALISM">Vandalism</option>
+                <option value="DRINKING_ALCOHOL">Drinking Alcohol</option>
+                <option value="OTHER">Other...</option>
+            </select>
+        </div>
 
-        <label for="violationDate">Violation Date</label>
-        <input type="date" id="violationDate" name="violationDate" required/>
-
-        <label for="violationReason">Violation Reason</label>
-        <select id="violationReason" name="violationReason" onchange="toggleOtherField()">
-            <option value="SPEEDING">Speeding</option>
-            <option value="INCORRECT_PARKING">Incorrect Parking</option>
-            <option value="VANDALISM">Vandalism</option>
-            <option value="DRINKING_ALCOHOL">Drinking Alcohol</option>
-            <option value="OTHER">Other...</option>
-        </select>
-
-        <div id="customViolationReasonDiv" style="display: none;">
+        <div id="customViolationReasonDiv" style="display: none;" class="input-container">
             <label for="customViolationReason">Please specify:</label>
             <input type="text" id="customViolationReason" name="customViolationReason"/>
         </div>
-
-        <label for="amount">Fine Amount</label>
-        <input type="number" id="amount" name="amount" required/>
-        <p>Plus administrative fee equals = 100zł</p>
-
-        <label for="currency">Currency</label>
-        <select name="currency" id="currency">
-            <option value="PLN">PLN</option>
-            <option value="EUR">EUR</option>
-        </select>
-
-        <label for="paymentDeadline">Payment Deadline</label>
-        <input type="date" id="paymentDeadline" name="paymentDeadline" required/>
-
-        <label for="file" class="file-upload-label">Add PDF File</label>
-        <input type="file" id="file" name="file" accept=".pdf" style="display: none;" onchange="handleFileChange()" />
-        <p id="file-name" style="display: none;">No file selected</p>
-
-        <button type="button" onclick="cancelForm()">Cancel</button>
-        <button type="submit" id="submitButton" >Save</button>
+        <div class="input-container">
+            <label for="amount">Fine Amount</label>
+            <input type="number" id="amount" name="amount" required/>
+            <p>Plus administrative fee equals = 100zł</p>
+        </div>
+        <div class="select-container">
+            <label for="currency">Currency</label>
+            <select name="currency" id="currency">
+                <option value="PLN">PLN</option>
+                <option value="EUR">EUR</option>
+            </select>
+        </div>
+        <div class="input-container">
+            <label for="paymentDeadline">Payment Deadline</label>
+            <input type="date" id="paymentDeadline" name="paymentDeadline" required/>
+        </div>
+        <div class="input-container">
+            <label for="file" class="file-upload-label">Add PDF File</label>
+            <input type="file" id="file" name="file" accept=".pdf" style="display: none;"
+                   onchange="handleFileChange()"/>
+            <p id="file-name" style="display: none;">No file selected</p>
+        </div>
+        <div class="button-container">
+            <button type="button" onclick="cancelForm()">Cancel</button>
+            <button type="submit" id="submitButton">Save</button>
+        </div>
     </form>
-    <div th:if="${session.positiveMessage}" class="positive-message">
-        <p th:text="${session.positiveMessage}"></p>
-    </div>
+
 
     <div th:if="${errorMessage}" class="error-message">
         <p th:text="${errorMessage}"></p>
     </div>
 </div>
-
 
 
 </body>
